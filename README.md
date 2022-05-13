@@ -1,8 +1,26 @@
-# ML-HomeWork
+#coding
+import numpy as np
+201
 
-## 提交办法
+#MSE
 
-1. 注册 github.com 账号
-2. fork 这个项目，做作业，然后提交，然后发起 pull request
-3. 老师会不定时的看到你的提交，进行合并
-4. 命名规范  张卓-20220507-作业1.py，请注意命名规范
+def mse_loss(y_true,y_pred):
+    mse_loss = np.sum(np.power(y_true - y_pred, 2))/y_true.shape[0]
+    return mse_loss
+
+#RMSE
+
+def rmse_loss(y_true,y_pred):
+    rmse_loss = np.squrt(np.sum(np.power(y_true - y_pred, 2))/y_true.shape[0])
+    return rmse_loss
+
+#MAE
+def mae_loss(y_true,y_pred):
+    mae_loss = np.sum(np.abs(y_true - y_pred))/y_true.shape[0]
+    return mae_loss
+
+#R_squared
+
+def r2(y_test, y_true):
+    r2 =  1 - ((y_test - y_true) ** 2).sum() / ((y_true - np.mean(y_true)) ** 2).sum()
+    return r2
