@@ -1,0 +1,14 @@
+from math import sqrt
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+print("mean_absolute_error:", mean_absolute_error(y_test, y_predict))
+print("mean_squared_error:", mean_squared_error(y_test, y_predict))
+print("rmse:", sqrt(mean_squared_error(y_test, y_predict)))
+print("r2 score:", r2_score(y_test, y_predict))
+
+mse = np.sum((y_test - y_predict) ** 2) / len(y_test)
+rmse = sqrt(mse)
+mae = np.sum(np.absolute(y_test - y_predict)) / len(y_test)
+r2 = 1-mse/ np.var(y_test)#均方误差/方差
+print(" mae:",mae,"mse:",mse," rmse:",rmse," r2:",r2)
