@@ -1,0 +1,8 @@
+多项式回归算法(Polynomial Regression)属于有监督的回归(Regression)学习算法。
+回归(Regression)算法通过建立变量之间的回归模型，通过学习(训练)过程得到变量与因变量之间的相关关系。回归(Regression)分析可以用于预测模型或分类模型。
+常见的回归算法包括：线性回归(Linear Regression)、非线性回归(Non-linear Regression)、逻辑回归(Logistic Regression)、多项式回归(Polynomial Regression)、岭回归(Ridge Regression)、套索回归(Lasso Regression)和弹性网络回归(ElasticNet Regression)。其中线性回归、非线性回归和逻辑回归最为常用。
+岭回归(Ridge Regression)的原理及作用：
+针对高方差，即过拟合的模型，解决办法之一就是对模型进行正则化：
+限制参数大小，当线性回归过拟合时，权重系数wj就会非常的大，岭回归就是要解决这样的问题。
+岭回归（Ridge Regression）可以理解为在线性回归的损失函数的基础上，加,入一个L2正则项，来限制W不要过大。
+其中λ>0，通过确定λ的值可以使得模型在偏差和方差之间达到平衡，随着λ的增大，模型的方差减小，偏差增大。
