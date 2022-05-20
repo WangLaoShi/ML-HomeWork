@@ -1,0 +1,84 @@
+3 岭回归-Ridge
+3.1 Ridge原理及应用
+岭回归也是一种用于回归的线性模型，因此它的预测公式与普通最小二乘法相同。但在岭回归中，对系数（w）的选择不仅要在训练数据上得到好的预测结果，而且还要拟合附加约束。**我们还希望系数尽量小。换句话说，w 的所有元素都应接近于 0。**直观上来看， 这意味着每个特征对输出的影响应尽可能小（即斜率很小），同时仍给出很好的预测结果。这种约束是所谓正则化（regularization）的一个例子。正则化是指对模型做显式约束，以避免过拟合。岭回归用到的这种被称为 L2 正则化。
+
+通常岭回归方程的R平方值会稍低于普通回归分析，但回归系数的显著性往往明显高于普通回归，在存在共线性问题和病态数据偏多的研究中有较大的实用价值。
+
+from sklearn.linear_model import Ridge
+
+ridge = Ridge().fit(X_train, y_train)
+print(f'Train set score: {ridge.score(X_train, y_train)}')
+print(f'Test set score: {ridge.score(X_test, y_test)}')
+print(f'The number of feature: {np.sum(ridge.coef_ != 0)}')
+1
+2
+3
+4
+5
+6
+[out]: 
+Train set score: 0.8406599011793962
+Test set score: 0.8836280810371685
+The number of feature: 10
+1
+2
+3
+4
+Ridge 是一种约束更强的模型，所以更不容易过拟合。复杂度更小的模型意味着在训练集上的性能更差，但泛化性能更好。
+
+3.2 Ridge调参
+Ridge 模型在模型的简单性(系数都接近于 0)与训练集性能之间做出权衡。简单性和训练集性能二者对于模型的重要程度可以由用户通过设置 alpha参数来指定。在前面的例子中，我们用的是默认参数 alpha=1.0。但没有理由认为这会给出最佳权衡。alpha的最佳设定值取决于用到的具体数据集。增大alpha会使得系数更加趋向于0，从而降低训练集性能，但可能会提高泛化性能。
+
+ridge10 = Ridge(alpha = 10).fit(X_train, y_train)
+ridge01 = Ridge(alpha = 0.1).fit(X_train, y_train)
+1
+2
+plt.plot(ridge.coef_, 's', label = 'Ridge alpha=1')
+plt.plot(ridge10.coef_, 's', label = 'Ridge alpha=10')
+plt.plot(ridge01.coef_, 's', label = 'Ridge alpha=0.1')
+
+plt.plot(lr.coef_, 'o', label = 'LinearRegression')
+plt.xlabel('Coefficient index')
+plt.ylabel('Coefficient magnitude')
+plt.hlines(0, 0, len(lr.coef_))
+plt.ylim(-25, 25)
+plt.legend()
+plt.show()
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+
+
+mglearn.plots.plot_ridge_n_samples()
+1
+
+如果有足够多的训练数据，正则化变得不那么重要，并且岭回归和线性回归将具有相同的性能。（在这个例子中，二者相同恰好 发生在整个数据集的情况下，这只是一个巧合）
+
+3.3 为什么要用Ridge
+总的来说，Ridge是使用是为了减少共线性的影响。
+标准线性或多项式回归在特征变量之间存在很高的共线性（high collinearity）的情况下将失败。
+
+我们进行回归分析需要了解每个自变量对因变量的单纯效应，高共线性就是说自变量间存在某种函数关系，如果你的两个自变量间（X1和X2）存在函数关系，那么X1改变一个单位时，X2也会相应地改变，此时你无法做到固定其他条件，单独考查X1对因变量Y的作用，你所观察到的X1的效应总是混杂了X2的作用，这就造成了分析误差，使得对自变量效应的分析不准确，所以做回归分析时需要排除高共线性的影响。
+
+高共线性的存在可以通过几种不同的方式来确定：
+
+尽管从理论上讲，该变量应该与Y高度相关，但回归系数并不显著。
+添加或删除X特征变量时，回归系数会发生显着变化。
+X特征变量具有较高的成对相关性（pairwise correlations）（检查相关矩阵）。
+标准线性回归的优化函数：
+为了缓解这个问题，岭回归为变量增加了一个小的平方偏差因子（其实也就是正则项）：
+
+这种平方偏差因子向模型中引入少量偏差，但大大减少了方差。
+
+岭回归的几个要点：
+
+这种回归的假设与最小平方回归相同，不同点在于最小平方回归的时候，我们假设数据的误差服从高斯分布使用的是极大似然估计（MLE），在岭回归的时候，由于添加了偏差因子，即w的先验信息，使用的是**极大后验估计（MAP）**来得到最终参数的。
+它缩小了系数的值，但没有达到零，这表明没有特征选择功能。
